@@ -1,8 +1,12 @@
 """
 config.py
 ---------
-Central configuration for InsightPilot v2.
-All constants, theme values, CSS, and system prompts live here.
+Central configuration for InsightPilot v3 (Gemini edition).
+
+All constants, Gemini model settings, theme values, CSS, and system
+prompts live here.  No secrets are hardcoded — everything is read from
+environment variables.
+
 No exec/eval anywhere in this project.
 """
 
@@ -11,19 +15,42 @@ from __future__ import annotations
 import os
 
 # ---------------------------------------------------------------------------
-# Anthropic model
+# Gemini model  (Google AI Studio free tier)
 # ---------------------------------------------------------------------------
-ANTHROPIC_API_KEY: str = os.environ.get("ANTHROPIC_API_KEY", "")
-MODEL_NAME: str = "claude-opus-4-5"
-MAX_TOKENS: int = 4096
-MAX_AGENT_STEPS: int = 12  # hard cap on agent loop iterations
+GEMINI_API_KEY: str = os.environ.get("GEMINI_API_KEY", "")
+
+# Default model — override by setting the GEMINI_MODEL env var.
+# Free-tier models: gemini-1.5-flash (recommended), gemini-1.5-flash-8b
+GEMINI_MODEL: str = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash")
+
+# Maximum output tokens for the model response
+MAX_OUTPUT_TOKENS: int = 4096
+
+# Hard cap on function-calling iterations per run
+MAX_AGENT_STEPS: int = 8
+
+# ---------------------------------------------------------------------------
+# Free-tier safety / rate-limit handling
+# ---------------------------------------------------------------------------
+# Number of retries on HTTP 429 / quota errors
+RETRY_ATTEMPTS: int = 3
+# Backoff delays in seconds for each retry attempt
+RETRY_BACKOFF_SECONDS: list[int] = [2, 4, 8]
+
+# Maximum characters of a single tool result sent back to the model.
+# Keeps prompts short and within free-tier context limits.
+TOOL_RESULT_MAX_CHARS: int = 2_000
+
+# Number of sample rows from the dataset included in the initial prompt.
+# Full data is never sent to the model — only col names + sample rows.
+PROMPT_SAMPLE_ROWS: int = 5
 
 # ---------------------------------------------------------------------------
 # Chart output
 # ---------------------------------------------------------------------------
-CHART_DIR: str = "charts"  # directory for saved chart PNGs
+CHART_DIR: str = "charts"       # directory for saved chart PNGs
 CHART_DPI: int = 130
-# Consistent palette for all charts (WCAG AA contrast on white)
+# Consistent palette — all colours are WCAG AA contrast-compliant on white
 CHART_PALETTE: list[str] = [
     "#0A7C65",  # primary green
     "#F59E0B",  # accent amber
@@ -44,26 +71,31 @@ MAX_UPLOAD_MB: int = 5
 ALLOWED_EXTENSIONS: list[str] = ["csv", "xlsx"]
 
 # ---------------------------------------------------------------------------
-# Sample datasets (relative paths from project root)
+# Sample datasets  (paths relative to project root)
 # ---------------------------------------------------------------------------
 SAMPLE_DATASETS: dict[str, str] = {
-    "data/sales_sample.csv": "🛍️ Data Penjualan (sales_sample.csv)",
+    "data/sales_sample.csv":    "🛍️ Data Penjualan (sales_sample.csv)",
     "data/nilai_mahasiswa.csv": "🎓 Nilai Mahasiswa (nilai_mahasiswa.csv)",
 }
+
+# ---------------------------------------------------------------------------
+# Demo report path  (used when API key is missing or quota is exhausted)
+# ---------------------------------------------------------------------------
+DEMO_REPORT_PATH: str = "data/demo_report.md"
 
 # ---------------------------------------------------------------------------
 # UI / Theme — light dashboard, WCAG AA compliant
 # ---------------------------------------------------------------------------
 PRIMARY_COLOR: str = "#0A7C65"
-ACCENT_COLOR: str = "#F59E0B"
-BG_PAGE: str = "#F8FAFC"
-BG_CARD: str = "#FFFFFF"
-BG_SIDEBAR: str = "#FFFFFF"
-TEXT_MAIN: str = "#1E293B"
-TEXT_MUTED: str = "#64748B"
-BORDER_COLOR: str = "#E2E8F0"
+ACCENT_COLOR: str  = "#F59E0B"
+BG_PAGE: str       = "#F8FAFC"
+BG_CARD: str       = "#FFFFFF"
+BG_SIDEBAR: str    = "#FFFFFF"
+TEXT_MAIN: str     = "#1E293B"
+TEXT_MUTED: str    = "#64748B"
+BORDER_COLOR: str  = "#E2E8F0"
 BORDER_RADIUS: str = "12px"
-SHADOW: str = "0 1px 4px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.04)"
+SHADOW: str        = "0 1px 4px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.04)"
 
 # ---------------------------------------------------------------------------
 # Global CSS injected into Streamlit
@@ -190,7 +222,7 @@ button[kind="primary"]:hover {{
     background: {PRIMARY_COLOR};
 }}
 
-/* === Demo mode banner === */
+/* === Demo / quota warning banner === */
 .demo-banner {{
     background: linear-gradient(90deg, #FEF3C7 0%, #FDE68A 100%);
     border: 1px solid {ACCENT_COLOR};
@@ -202,6 +234,17 @@ button[kind="primary"]:hover {{
     margin-bottom: 1rem;
 }}
 
+/* === Retry / quota info banner === */
+.quota-banner {{
+    background: #EFF6FF;
+    border: 1px solid #3B82F6;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.87rem;
+    color: #1E40AF;
+    margin-bottom: 0.75rem;
+}}
+
 /* === Tab styling === */
 button[data-baseweb="tab"] {{
     font-weight: 600;
@@ -211,17 +254,17 @@ button[data-baseweb="tab"] {{
 """
 
 # ---------------------------------------------------------------------------
-# Report language
+# Report settings
 # ---------------------------------------------------------------------------
-REPORT_LANGUAGE: str = "Indonesian"
+REPORT_LANGUAGE: str  = "Indonesian"
 REPORT_MAX_WORDS: int = 600
 
 # ---------------------------------------------------------------------------
-# System prompt
+# System prompt  (sent once as the "system" / initial context to Gemini)
 # ---------------------------------------------------------------------------
 SYSTEM_PROMPT: str = f"""
 Anda adalah InsightPilot, analis data ahli untuk IBM AI Builders Challenge.
-Tugas Anda: menghasilkan laporan data mendalam dalam Bahasa Indonesia.
+Tugas Anda: menghasilkan laporan analisis data mendalam dalam Bahasa Indonesia.
 
 Tools yang tersedia:
 - get_overview       : statistik dasar, nilai hilang, duplikat
@@ -231,16 +274,17 @@ Tools yang tersedia:
 - make_chart         : buat grafik (bar/line/hist) dan simpan sebagai PNG
 
 Aturan WAJIB:
-1. Panggil tools secara bertahap. Mulai dengan get_overview.
+1. Selalu mulai dengan memanggil get_overview.
 2. Buat MINIMAL 2 grafik dengan make_chart.
-3. Setelah eksplorasi (maks {MAX_AGENT_STEPS} langkah), tulis laporan akhir Markdown
-   dengan TEPAT keempat bagian berikut (gunakan heading ## persis ini):
+3. Setelah eksplorasi selesai (maks {MAX_AGENT_STEPS} langkah tool), tulis laporan
+   akhir Markdown dengan TEPAT keempat bagian berikut (gunakan heading ## persis ini):
    ## Ringkasan Eksekutif
    ## Kualitas Data
    ## Temuan Utama
    ## Rekomendasi
 4. Laporan HARUS di bawah {REPORT_MAX_WORDS} kata.
-5. Gunakan HANYA angka dari hasil tool — dilarang mengarang data.
+5. Gunakan HANYA angka dari hasil tool — dilarang mengarang atau mengira-ngira data.
 6. Sebutkan nilai hilang, duplikat, dan outlier secara eksplisit di bagian
    "Kualitas Data" dan "Temuan Utama".
+7. Setelah laporan selesai, JANGAN panggil tool lagi.
 """.strip()

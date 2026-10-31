@@ -1,9 +1,12 @@
 """
 tools.py
 --------
-Data-analysis tools for InsightPilot v2.
+Data-analysis tools for InsightPilot v3 (Gemini edition).
 
-Five tools exposed to the Anthropic agent via tool_use:
+Five tools with identical logic to v2, but schemas are in Google Gen AI SDK
+format (google.genai.types.FunctionDeclaration / Tool).
+
+Tools:
   1. get_overview       – shape, dtypes, missing values, duplicates, descriptive stats
   2. get_correlations   – pairwise Pearson/Spearman/Kendall correlations
   3. group_summary      – groupby aggregation
@@ -11,7 +14,8 @@ Five tools exposed to the Anthropic agent via tool_use:
   5. make_chart         – bar / line / hist PNG generation
 
 Each function returns a JSON-serialisable dict.
-Tool errors are returned AS data (not raised) so the agent can self-correct.
+Errors are returned as {"error": "..."} so the model can self-correct.
+No exec/eval anywhere.
 """
 
 from __future__ import annotations
@@ -22,7 +26,7 @@ import uuid
 from typing import Any
 
 import matplotlib
-matplotlib.use("Agg")  # must precede pyplot import — non-interactive backend
+matplotlib.use("Agg")  # non-interactive backend — must precede pyplot import
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -60,14 +64,13 @@ def _ensure_chart_dir() -> None:
 
 def _validate_column(df: pd.DataFrame, col: str, label: str = "kolom") -> str | None:
     """
-    Return an error string if *col* is not in *df*, else None.
+    Return an error string if *col* is not present in *df*, else None.
 
     Parameters
     ----------
-    df : pd.DataFrame
-    col : str
-    label : str
-        Human-readable label for error messages.
+    df    : pd.DataFrame
+    col   : str   Column name to check.
+    label : str   Human-readable parameter name for error messages.
     """
     if col not in df.columns:
         available = ", ".join(f"'{c}'" for c in df.columns)
@@ -86,29 +89,19 @@ def get_overview(df: pd.DataFrame) -> dict[str, Any]:
     """
     Return a high-level statistical overview of *df*.
 
-    Covers shape, column types, missing values per column, duplicate rows,
+    Covers shape, column types, per-column missing values, duplicate rows,
     and descriptive statistics for numeric columns.
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-
-    Returns
-    -------
-    dict  JSON-serialisable overview.
     """
     numeric_cols = df.select_dtypes(include="number").columns.tolist()
     categorical_cols = df.select_dtypes(
         include=["object", "category"]
     ).columns.tolist()
 
-    # Descriptive stats for numeric columns
     desc: dict[str, Any] = {}
     if numeric_cols:
         stats_df = df[numeric_cols].describe().round(4)
         desc = _safe_json(stats_df.to_dict())
 
-    # Per-column missing info
     missing_series = df.isnull().sum()
     missing_pct = (missing_series / len(df) * 100).round(2)
     missing_info = {
@@ -120,7 +113,6 @@ def get_overview(df: pd.DataFrame) -> dict[str, Any]:
         if missing_series[col] > 0
     }
 
-    # Unique counts for categorical columns
     unique_counts = {col: int(df[col].nunique()) for col in categorical_cols}
 
     return _safe_json({
@@ -151,40 +143,30 @@ def get_correlations(
 
     Parameters
     ----------
-    df : pd.DataFrame
-    method : str   'pearson' | 'spearman' | 'kendall'
-    top_n : int    Return only the top-N strongest pairs (by |r|).
-
-    Returns
-    -------
-    dict  Correlation matrix + ranked top pairs.
+    method : 'pearson' | 'spearman' | 'kendall'
+    top_n  : Return only the top-N strongest pairs (by |r|).
     """
-    # Validate method
     allowed_methods = {"pearson", "spearman", "kendall"}
     if method not in allowed_methods:
         return {
             "error": (
                 f"method '{method}' tidak valid. "
-                f"Gunakan salah satu dari: {', '.join(sorted(allowed_methods))}."
+                f"Gunakan: {', '.join(sorted(allowed_methods))}."
             )
         }
 
-    # Need at least 2 numeric columns
     numeric_df = df.select_dtypes(include="number")
     if numeric_df.shape[1] < 2:
         return {
             "error": (
-                "Dibutuhkan minimal 2 kolom numerik untuk menghitung korelasi. "
-                f"Dataset hanya memiliki {numeric_df.shape[1]} kolom numerik."
+                f"Dibutuhkan minimal 2 kolom numerik. "
+                f"Dataset hanya memiliki {numeric_df.shape[1]}."
             )
         }
 
-    # Validate top_n
     top_n = max(1, min(int(top_n), 50))
-
     corr_matrix = numeric_df.corr(method=method).round(4)
 
-    # Build ranked pair list
     pairs: list[dict[str, Any]] = []
     cols = corr_matrix.columns.tolist()
     for i, c1 in enumerate(cols):
@@ -223,17 +205,11 @@ def group_summary(
 
     Parameters
     ----------
-    df : pd.DataFrame
-    group_col : str   Column to group by (usually categorical).
-    agg_col : str     Numeric column to aggregate.
-    agg_func : str    sum | mean | count | min | max | median
-    top_n : int       Return only top-N groups (descending by value).
-
-    Returns
-    -------
-    dict  Aggregated results sorted descending.
+    group_col : Column to group by (usually categorical).
+    agg_col   : Numeric column to aggregate.
+    agg_func  : sum | mean | count | min | max | median
+    top_n     : Return only top-N groups (descending by value).
     """
-    # Column validation
     err = _validate_column(df, group_col, "group_col")
     if err:
         return {"error": err}
@@ -273,7 +249,7 @@ def group_summary(
 
 
 # ---------------------------------------------------------------------------
-# Tool 4 – detect_outliers (IQR method)
+# Tool 4 – detect_outliers  (IQR / Tukey fence method)
 # ---------------------------------------------------------------------------
 
 def detect_outliers(
@@ -282,20 +258,15 @@ def detect_outliers(
     iqr_multiplier: float = 1.5,
 ) -> dict[str, Any]:
     """
-    Detect outliers in a numeric column using the IQR (Tukey fence) method.
+    Detect outliers in a numeric column using the IQR method.
 
     An observation is an outlier if it falls below
     Q1 − iqr_multiplier × IQR  or above  Q3 + iqr_multiplier × IQR.
 
     Parameters
     ----------
-    df : pd.DataFrame
-    column : str             Numeric column to analyse.
-    iqr_multiplier : float   Typically 1.5 (mild) or 3.0 (extreme).
-
-    Returns
-    -------
-    dict  Summary statistics, fence bounds, outlier count, and outlier values.
+    column         : Numeric column to analyse.
+    iqr_multiplier : 1.5 (mild) or 3.0 (extreme). Default: 1.5.
     """
     err = _validate_column(df, column, "column")
     if err:
@@ -354,28 +325,14 @@ def make_chart(
     """
     Create a chart and save it as a PNG file to CHART_DIR.
 
-    Supported types
-    ---------------
-    bar       – grouped bar (x=category, y=numeric, aggregated with sum)
-    line      – line chart (x sorted ascending)
-    hist      – histogram of a single numeric column (pass x_col; set y_col=x_col)
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-    chart_type : str   'bar' | 'line' | 'hist'
-    x_col : str        Category (bar/line) or numeric column (hist).
-    y_col : str        Numeric column (bar/line) or same as x_col (hist).
-    title : str        Chart title (auto-generated if empty).
-    top_n : int        For bar charts: limit to top-N categories.
-
-    Returns
-    -------
-    dict  Contains 'file_path' on success, 'error' on failure.
+    chart_type : 'bar' | 'line' | 'hist'
+    x_col      : Category column (bar/line) or numeric column (hist).
+    y_col      : Numeric column (bar/line) or same as x_col (hist).
+    title      : Optional chart title.
+    top_n      : For bar: limit to top-N categories.
     """
     _ensure_chart_dir()
 
-    # Validate chart_type
     allowed_types = {"bar", "line", "hist"}
     if chart_type not in allowed_types:
         return {
@@ -385,7 +342,6 @@ def make_chart(
             )
         }
 
-    # Validate columns (y_col == x_col is allowed for hist)
     err = _validate_column(df, x_col, "x_col")
     if err:
         return {"error": err}
@@ -396,18 +352,16 @@ def make_chart(
 
     top_n = max(1, min(int(top_n), 50))
     filename = f"{CHART_DIR}/chart_{uuid.uuid4().hex[:8]}.png"
-
-    # Apply consistent theme
     primary = CHART_PALETTE[0]
     palette = CHART_PALETTE
 
     fig, ax = plt.subplots(figsize=(9, 5))
     fig.patch.set_facecolor("#F8FAFC")
     ax.set_facecolor("#FFFFFF")
+    auto_title = title or f"{chart_type.title()}: {y_col} per {x_col}"
 
     try:
         if chart_type == "bar":
-            # Aggregate y by x then take top_n
             plot_df = (
                 df.groupby(x_col)[y_col]
                 .sum()
@@ -415,9 +369,7 @@ def make_chart(
                 .sort_values(y_col, ascending=False)
                 .head(top_n)
             )
-            bar_colors = (palette * ((len(plot_df) // len(palette)) + 1))[
-                : len(plot_df)
-            ]
+            bar_colors = (palette * ((len(plot_df) // len(palette)) + 1))[: len(plot_df)]
             ax.bar(
                 plot_df[x_col].astype(str),
                 plot_df[y_col],
@@ -441,12 +393,7 @@ def make_chart(
                 markerfacecolor="#F59E0B",
                 markeredgecolor="white",
             )
-            ax.fill_between(
-                range(len(plot_df)),
-                plot_df[y_col],
-                alpha=0.08,
-                color=primary,
-            )
+            ax.fill_between(range(len(plot_df)), plot_df[y_col], alpha=0.08, color=primary)
             ax.set_xlabel(x_col, fontsize=10, color="#64748B")
             ax.set_ylabel(y_col, fontsize=10, color="#64748B")
             plt.xticks(rotation=38, ha="right", fontsize=8)
@@ -464,15 +411,12 @@ def make_chart(
             ax.set_xlabel(col, fontsize=10, color="#64748B")
             ax.set_ylabel("Frekuensi", fontsize=10, color="#64748B")
 
-        # Common formatting
-        auto_title = title or f"{chart_type.title()}: {y_col} per {x_col}"
         ax.set_title(auto_title, fontsize=13, pad=12, color="#1E293B", fontweight="bold")
         ax.spines[["top", "right"]].set_visible(False)
         ax.spines["left"].set_color("#E2E8F0")
         ax.spines["bottom"].set_color("#E2E8F0")
         ax.tick_params(colors="#64748B")
         ax.grid(axis="y", color="#F1F5F9", linewidth=0.8, linestyle="--")
-
         plt.tight_layout()
         plt.savefig(filename, dpi=CHART_DPI, bbox_inches="tight")
         plt.close(fig)
@@ -497,24 +441,24 @@ def make_chart(
 
 def dispatch_tool(
     tool_name: str,
-    tool_input: dict[str, Any],
+    tool_args: dict[str, Any],
     df: pd.DataFrame,
 ) -> str:
     """
-    Route a tool-use call from the agent to the correct function.
+    Route a Gemini function-calling call to the correct analysis function.
 
-    All errors (including unexpected exceptions) are returned as JSON
-    so the agent can read and self-correct — no stack traces leak to the UI.
+    All errors are caught and returned as {"error": "..."} JSON strings so
+    the model can read them and self-correct.  No exceptions escape to the UI.
 
     Parameters
     ----------
-    tool_name : str
-    tool_input : dict   Arguments from the agent's tool_use block.
-    df : pd.DataFrame   Currently loaded dataset.
+    tool_name : str              Name matching one of the five registered tools.
+    tool_args : dict[str, Any]   Arguments from the model's function call.
+    df        : pd.DataFrame     Currently loaded dataset.
 
     Returns
     -------
-    str  JSON string (result dict or {"error": ...}).
+    str  JSON string (result dict or {"error": "..."}).
     """
     try:
         if tool_name == "get_overview":
@@ -523,37 +467,37 @@ def dispatch_tool(
         elif tool_name == "get_correlations":
             result = get_correlations(
                 df,
-                method=str(tool_input.get("method", "pearson")),
-                top_n=int(tool_input.get("top_n", 10)),
+                method=str(tool_args.get("method", "pearson")),
+                top_n=int(tool_args.get("top_n", 10)),
             )
 
         elif tool_name == "group_summary":
-            if "group_col" not in tool_input:
+            if "group_col" not in tool_args:
                 result = {"error": "Parameter 'group_col' wajib diisi."}
-            elif "agg_col" not in tool_input:
+            elif "agg_col" not in tool_args:
                 result = {"error": "Parameter 'agg_col' wajib diisi."}
             else:
                 result = group_summary(
                     df,
-                    group_col=str(tool_input["group_col"]),
-                    agg_col=str(tool_input["agg_col"]),
-                    agg_func=str(tool_input.get("agg_func", "sum")),
-                    top_n=int(tool_input.get("top_n", 10)),
+                    group_col=str(tool_args["group_col"]),
+                    agg_col=str(tool_args["agg_col"]),
+                    agg_func=str(tool_args.get("agg_func", "sum")),
+                    top_n=int(tool_args.get("top_n", 10)),
                 )
 
         elif tool_name == "detect_outliers":
-            if "column" not in tool_input:
+            if "column" not in tool_args:
                 result = {"error": "Parameter 'column' wajib diisi."}
             else:
                 result = detect_outliers(
                     df,
-                    column=str(tool_input["column"]),
-                    iqr_multiplier=float(tool_input.get("iqr_multiplier", 1.5)),
+                    column=str(tool_args["column"]),
+                    iqr_multiplier=float(tool_args.get("iqr_multiplier", 1.5)),
                 )
 
         elif tool_name == "make_chart":
             required = ["chart_type", "x_col", "y_col"]
-            missing_params = [p for p in required if p not in tool_input]
+            missing_params = [p for p in required if p not in tool_args]
             if missing_params:
                 result = {
                     "error": (
@@ -564,45 +508,50 @@ def dispatch_tool(
             else:
                 result = make_chart(
                     df,
-                    chart_type=str(tool_input["chart_type"]),
-                    x_col=str(tool_input["x_col"]),
-                    y_col=str(tool_input["y_col"]),
-                    title=str(tool_input.get("title", "")),
-                    top_n=int(tool_input.get("top_n", 15)),
+                    chart_type=str(tool_args["chart_type"]),
+                    x_col=str(tool_args["x_col"]),
+                    y_col=str(tool_args["y_col"]),
+                    title=str(tool_args.get("title", "")),
+                    top_n=int(tool_args.get("top_n", 15)),
                 )
 
         else:
-            available = "get_overview, get_correlations, group_summary, detect_outliers, make_chart"
+            available = (
+                "get_overview, get_correlations, group_summary, "
+                "detect_outliers, make_chart"
+            )
             result = {
                 "error": (
                     f"Tool '{tool_name}' tidak dikenal. "
-                    f"Tools yang tersedia: {available}."
+                    f"Tersedia: {available}."
                 )
             }
 
     except Exception as exc:
-        result = {"error": f"Tool '{tool_name}' mengalami kesalahan tak terduga: {exc}"}
+        result = {"error": f"Tool '{tool_name}' error tak terduga: {exc}"}
 
     return json.dumps(_safe_json(result), ensure_ascii=False, indent=2)
 
 
 # ---------------------------------------------------------------------------
-# Tool schemas (Anthropic tool_use format)
+# Gemini function declarations  (google-genai SDK format)
 # ---------------------------------------------------------------------------
+# We define these as plain dicts matching the OpenAPI subset that Gemini
+# accepts, then wrap them in google.genai.types.Tool in agent.py.
+# Keeping them here avoids circular imports.
 
-TOOL_SCHEMAS: list[dict[str, Any]] = [
+FUNCTION_DECLARATIONS: list[dict[str, Any]] = [
     {
         "name": "get_overview",
         "description": (
-            "Kembalikan ringkasan statistik dataset: shape, tipe data kolom, "
+            "Kembalikan ringkasan statistik dataset: shape, tipe kolom, "
             "jumlah nilai hilang per kolom, total nilai hilang, baris duplikat, "
-            "statistik deskriptif kolom numerik, dan jumlah nilai unik kolom kategori. "
-            "Selalu panggil tool ini pertama kali."
+            "statistik deskriptif kolom numerik, jumlah nilai unik kolom kategori. "
+            "Panggil tool ini pertama kali."
         ),
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {},
-            "required": [],
         },
     },
     {
@@ -611,20 +560,19 @@ TOOL_SCHEMAS: list[dict[str, Any]] = [
             "Hitung korelasi antar semua pasangan kolom numerik. "
             "Kembalikan matriks korelasi dan daftar pasangan terkuat."
         ),
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {
                 "method": {
                     "type": "string",
                     "enum": ["pearson", "spearman", "kendall"],
-                    "description": "Metode korelasi. Default: 'pearson'.",
+                    "description": "Metode korelasi. Default: pearson.",
                 },
                 "top_n": {
                     "type": "integer",
                     "description": "Jumlah pasangan teratas. Default: 10.",
                 },
             },
-            "required": [],
         },
     },
     {
@@ -633,7 +581,7 @@ TOOL_SCHEMAS: list[dict[str, Any]] = [
             "Agregasi kolom numerik berdasarkan kolom kategori. "
             "Berguna untuk membandingkan segmen (misal: penjualan per cabang)."
         ),
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {
                 "group_col": {
@@ -647,11 +595,11 @@ TOOL_SCHEMAS: list[dict[str, Any]] = [
                 "agg_func": {
                     "type": "string",
                     "enum": ["sum", "mean", "count", "min", "max", "median"],
-                    "description": "Fungsi agregasi. Default: 'sum'.",
+                    "description": "Fungsi agregasi. Default: sum.",
                 },
                 "top_n": {
                     "type": "integer",
-                    "description": "Jumlah grup teratas yang dikembalikan. Default: 10.",
+                    "description": "Jumlah grup teratas. Default: 10.",
                 },
             },
             "required": ["group_col", "agg_col"],
@@ -661,9 +609,9 @@ TOOL_SCHEMAS: list[dict[str, Any]] = [
         "name": "detect_outliers",
         "description": (
             "Deteksi outlier pada kolom numerik menggunakan metode IQR (Tukey fence). "
-            "Kembalikan batas bawah/atas, jumlah outlier, dan nilai-nilai outlier."
+            "Kembalikan batas bawah/atas, jumlah outlier, dan nilai outlier."
         ),
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {
                 "column": {
@@ -673,8 +621,8 @@ TOOL_SCHEMAS: list[dict[str, Any]] = [
                 "iqr_multiplier": {
                     "type": "number",
                     "description": (
-                        "Pengali IQR untuk menentukan batas. "
-                        "1.5 = outlier ringan, 3.0 = outlier ekstrem. Default: 1.5."
+                        "Pengali IQR: 1.5 = outlier ringan, 3.0 = ekstrem. "
+                        "Default: 1.5."
                     ),
                 },
             },
@@ -685,11 +633,11 @@ TOOL_SCHEMAS: list[dict[str, Any]] = [
         "name": "make_chart",
         "description": (
             "Buat grafik dan simpan sebagai file PNG. "
-            "Jenis: 'bar' (batang per kategori), 'line' (tren waktu), "
-            "'hist' (distribusi kolom numerik; set y_col=x_col). "
-            "Selalu buat minimal 2 grafik."
+            "Jenis: bar (batang per kategori), line (tren), "
+            "hist (distribusi; set y_col sama dengan x_col). "
+            "Buat minimal 2 grafik."
         ),
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {
                 "chart_type": {
