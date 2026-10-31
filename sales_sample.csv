@@ -1,0 +1,101 @@
+order_id,order_date,region,category,product,channel,quantity,unit_price,discount_pct,revenue,rating
+ORD-1000,2024-11-23,Jawa Barat,Elektronik,Earbuds,Marketplace,4,250000,0,1000000,4.4
+ORD-1001,2024-10-06,Jawa Barat,Olahraga,Bola Futsal,Toko Langsung,1,49000,0,49000,3.5
+ORD-1002,2024-11-04,Jawa Barat,Olahraga,Yoga Mat,Website,12,1200000,0,14400000,4.2
+ORD-1003,2024-01-04,Jawa Tengah,Buku & Alat Tulis,Pulpen Premium,Toko Langsung,6,499000,0,2994000,4.9
+ORD-1004,2024-06-21,Jawa Barat,Elektronik,Tablet,WhatsApp,2,750000,20,1200000,4.2
+ORD-1005,2024-01-23,Kalimantan Selatan,Peralatan Rumah,Lampu LED,Reseller,2,1200000,0,2400000,3.6
+ORD-1006,2024-11-17,Bali,Makanan & Minuman,Cokelat Premium,Toko Langsung,4,75000,0,300000,4.5
+ORD-1007,2024-02-10,Jawa Tengah,Elektronik,Tablet,WhatsApp,5,2500000,15,10625000,3.3
+ORD-1008,2024-06-30,Jawa Tengah,Buku & Alat Tulis,Planner 2025,Toko Langsung,12,75000,10,810000,4.1
+ORD-1009,2024-05-05,Jawa Tengah,Peralatan Rumah,Sapu Robot,WhatsApp,5,250000,15,1062500,4.7
+ORD-1010,2024-01-29,Jawa Tengah,Elektronik,Earbuds,Toko Langsung,7,499000,0,3493000,4.8
+ORD-1011,2024-10-17,Kalimantan Selatan,Makanan & Minuman,Teh Hijau,Website,11,2500000,5,26125000,3.3
+ORD-1012,2024-03-12,Jawa Tengah,Buku & Alat Tulis,Sticky Notes,Reseller,9,499000,15,3817350,3.9
+ORD-1013,2024-10-25,Sumatera Utara,Makanan & Minuman,Teh Hijau,Marketplace,3,2500000,0,7500000,4.7
+ORD-1014,2024-03-19,Kalimantan Selatan,Fashion,Tas Ransel,Website,10,75000,5,712500,4.2
+ORD-1015,2024-08-27,Bali,Makanan & Minuman,Cokelat Premium,Marketplace,14,49000,15,583100,4.4
+ORD-1016,2024-10-01,Jawa Timur,Buku & Alat Tulis,Planner 2025,Toko Langsung,2,499000,5,948100,3.9
+ORD-1017,2024-05-14,Bali,Fashion,Topi Baseball,WhatsApp,15,75000,20,900000,4.7
+ORD-1018,2024-09-16,Bali,Fashion,Kaos Polos,Reseller,6,120000,10,648000,4.8
+ORD-1019,2024-11-02,Jawa Timur,Peralatan Rumah,Blender,WhatsApp,2,750000,20,1200000,3.5
+ORD-1020,2024-05-03,Bali,Elektronik,Laptop,Marketplace,12,2500000,20,24000000,5.0
+ORD-1021,2024-09-29,Jawa Tengah,Fashion,Tas Ransel,Reseller,9,120000,0,1080000,4.7
+ORD-1022,2024-08-04,Jawa Tengah,Olahraga,Yoga Mat,WhatsApp,12,499000,5,5688600,3.9
+ORD-1023,2024-09-21,Sumatera Utara,Elektronik,Smartphone,Marketplace,4,75000,0,300000,4.2
+ORD-1024,2024-04-27,Bali,Fashion,Sepatu Sneakers,Marketplace,2,49000,0,98000,4.8
+ORD-1025,2024-06-18,Jawa Barat,Olahraga,Yoga Mat,Reseller,5,2500000,0,12500000,3.3
+ORD-1026,2024-10-19,Bali,Peralatan Rumah,Rice Cooker,Website,13,2500000,20,26000000,3.4
+ORD-1027,2024-02-19,Kalimantan Selatan,Peralatan Rumah,Panci Set,Marketplace,7,1200000,5,7980000,4.3
+ORD-1028,2024-11-26,Jawa Barat,Elektronik,Tablet,Marketplace,12,750000,20,7200000,3.5
+ORD-1029,2024-04-07,Bali,Peralatan Rumah,Rice Cooker,Website,7,120000,0,840000,3.5
+ORD-1030,2024-02-08,Sumatera Utara,Olahraga,Sepatu Lari,Toko Langsung,1,49000,0,49000,3.3
+ORD-1031,2024-09-05,Sumatera Utara,Fashion,Tas Ransel,Website,15,49000,0,735000,3.0
+ORD-1032,2024-07-18,Jawa Timur,Peralatan Rumah,Panci Set,Toko Langsung,7,2500000,0,17500000,3.6
+ORD-1033,2024-01-30,Bali,Buku & Alat Tulis,Sticky Notes,Marketplace,1,750000,0,750000,4.2
+ORD-1034,2024-09-14,Bali,Fashion,Sepatu Sneakers,Toko Langsung,9,75000,20,540000,3.1
+ORD-1035,2024-02-04,Kalimantan Selatan,Fashion,Tas Ransel,Reseller,2,250000,10,450000,3.1
+ORD-1036,2024-02-11,Sumatera Utara,Buku & Alat Tulis,Sticky Notes,Toko Langsung,10,750000,0,7500000,4.3
+ORD-1037,2024-06-09,Jawa Tengah,Makanan & Minuman,Madu Asli,WhatsApp,3,499000,5,1422150,4.9
+ORD-1038,2024-02-07,Jawa Barat,Peralatan Rumah,Lampu LED,Reseller,10,75000,0,750000,3.4
+ORD-1039,2024-05-15,Jawa Tengah,Makanan & Minuman,Kopi Arabika,WhatsApp,15,250000,0,3750000,3.3
+ORD-1040,2024-10-05,Kalimantan Selatan,Makanan & Minuman,Cokelat Premium,Reseller,13,49000,15,541450,3.6
+ORD-1041,2024-12-05,Jawa Barat,Fashion,Jaket Denim,Reseller,2,75000,15,127500,3.3
+ORD-1042,2024-05-24,Bali,Fashion,Jaket Denim,Website,4,499000,10,1796400,3.5
+ORD-1043,2024-01-27,Jawa Barat,Buku & Alat Tulis,Pulpen Premium,Marketplace,14,499000,0,6986000,3.7
+ORD-1044,2024-03-07,Kalimantan Selatan,Makanan & Minuman,Teh Hijau,Website,12,2500000,10,27000000,4.1
+ORD-1045,2024-02-27,Jawa Barat,Buku & Alat Tulis,Buku Bisnis,WhatsApp,9,49000,20,352800,4.2
+ORD-1046,2024-03-16,Sumatera Utara,Fashion,Sepatu Sneakers,Marketplace,5,750000,20,3000000,4.8
+ORD-1047,2024-04-17,Kalimantan Selatan,Fashion,Sepatu Sneakers,Toko Langsung,6,1200000,10,6480000,4.9
+ORD-1048,2024-05-01,Jawa Tengah,Fashion,Tas Ransel,WhatsApp,1,120000,15,102000,4.6
+ORD-1049,2024-07-29,Kalimantan Selatan,Buku & Alat Tulis,Buku Bisnis,Marketplace,5,120000,20,480000,3.8
+ORD-1050,2024-01-20,Sumatera Utara,Fashion,Kaos Polos,WhatsApp,14,2500000,0,35000000,4.6
+ORD-1051,2024-04-26,Jawa Tengah,Elektronik,Smartphone,Marketplace,7,750000,0,5250000,4.9
+ORD-1052,2024-05-22,Jawa Timur,Buku & Alat Tulis,Sticky Notes,Marketplace,7,750000,0,5250000,4.8
+ORD-1053,2024-05-13,Jawa Tengah,Olahraga,Dumbbell Set,Website,1,75000,10,67500,3.7
+ORD-1054,2024-06-09,Sumatera Utara,Olahraga,Raket Badminton,Toko Langsung,2,1200000,10,2160000,3.5
+ORD-1055,2024-12-28,Sumatera Utara,Elektronik,Smartwatch,Website,15,250000,0,3750000,3.1
+ORD-1056,2024-12-06,Jawa Timur,Olahraga,Dumbbell Set,WhatsApp,11,75000,15,701250,4.0
+ORD-1057,2024-12-07,Sumatera Utara,Makanan & Minuman,Madu Asli,Toko Langsung,12,499000,10,5389200,3.4
+ORD-1058,2024-12-06,Sumatera Utara,Buku & Alat Tulis,Buku Bisnis,Reseller,10,499000,5,4740500,4.7
+ORD-1059,2024-06-04,Jawa Timur,Fashion,Tas Ransel,Website,13,750000,5,9262500,3.9
+ORD-1060,2024-04-19,Bali,Peralatan Rumah,Rice Cooker,Reseller,11,75000,0,825000,4.3
+ORD-1061,2024-11-13,Jawa Timur,Elektronik,Smartphone,Toko Langsung,11,499000,0,5489000,3.3
+ORD-1062,2024-01-24,Jawa Tengah,Peralatan Rumah,Lampu LED,Website,14,75000,5,997500,4.8
+ORD-1063,2024-10-21,Jawa Tengah,Buku & Alat Tulis,Pulpen Premium,Toko Langsung,8,1200000,0,9600000,4.3
+ORD-1064,2024-01-03,Jawa Barat,Peralatan Rumah,Rice Cooker,Reseller,3,2500000,0,7500000,3.5
+ORD-1065,2024-03-03,Sumatera Utara,Fashion,Tas Ransel,Website,11,750000,20,6600000,4.2
+ORD-1066,2024-09-15,Sumatera Utara,Olahraga,Bola Futsal,Website,15,120000,15,1530000,3.9
+ORD-1067,2024-05-06,Kalimantan Selatan,Makanan & Minuman,Cokelat Premium,Website,8,250000,0,2000000,3.2
+ORD-1068,2024-05-26,Jawa Tengah,Makanan & Minuman,Snack Box,Toko Langsung,6,75000,0,450000,3.5
+ORD-1069,2024-12-21,Jawa Tengah,Buku & Alat Tulis,Buku Bisnis,WhatsApp,2,1200000,5,2280000,4.1
+ORD-1070,2024-07-31,Jawa Barat,Fashion,Tas Ransel,Reseller,7,49000,20,274400,3.8
+ORD-1071,2024-01-04,Jawa Timur,Makanan & Minuman,Madu Asli,Reseller,14,1200000,10,15120000,4.6
+ORD-1072,2024-04-22,Sumatera Utara,Fashion,Jaket Denim,Website,7,2500000,0,17500000,3.7
+ORD-1073,2024-12-13,Sumatera Utara,Buku & Alat Tulis,Buku Bisnis,Reseller,14,2500000,0,35000000,4.1
+ORD-1074,2024-07-20,Bali,Olahraga,Sepatu Lari,Website,2,1200000,0,2400000,3.4
+ORD-1075,2024-05-13,Sumatera Utara,Makanan & Minuman,Teh Hijau,Website,8,750000,0,6000000,3.6
+ORD-1076,2024-08-03,Jawa Timur,Elektronik,Tablet,Toko Langsung,1,49000,0,49000,4.3
+ORD-1077,2024-11-29,Jawa Barat,Elektronik,Smartphone,Toko Langsung,4,49000,10,176400,3.5
+ORD-1078,2024-08-30,Kalimantan Selatan,Elektronik,Smartwatch,WhatsApp,4,2500000,15,8500000,4.5
+ORD-1079,2024-03-26,Bali,Olahraga,Sepatu Lari,Marketplace,13,120000,0,1560000,4.2
+ORD-1080,2024-06-08,Bali,Buku & Alat Tulis,Pulpen Premium,Reseller,7,250000,0,1750000,4.4
+ORD-1081,2024-11-17,Jawa Tengah,Elektronik,Earbuds,Reseller,14,75000,20,840000,4.6
+ORD-1082,2024-06-26,Bali,Peralatan Rumah,Panci Set,Website,2,750000,0,1500000,4.6
+ORD-1083,2024-02-24,Sumatera Utara,Makanan & Minuman,Madu Asli,Toko Langsung,12,120000,5,1368000,4.5
+ORD-1084,2024-11-29,Jawa Timur,Olahraga,Raket Badminton,Website,13,2500000,5,30875000,4.7
+ORD-1085,2024-10-30,Jawa Timur,Makanan & Minuman,Teh Hijau,Website,14,75000,0,1050000,3.5
+ORD-1086,2024-08-25,Bali,Olahraga,Bola Futsal,WhatsApp,6,49000,5,279300,3.4
+ORD-1087,2024-04-18,Jawa Timur,Makanan & Minuman,Snack Box,Marketplace,5,499000,10,2245500,4.0
+ORD-1088,2024-04-07,Jawa Barat,Fashion,Tas Ransel,Website,8,250000,15,1700000,4.3
+ORD-1089,2024-09-08,Sumatera Utara,Elektronik,Laptop,Toko Langsung,5,250000,5,1187500,3.6
+ORD-1090,2024-10-24,Jawa Timur,Peralatan Rumah,Lampu LED,Reseller,9,750000,5,6412500,3.7
+ORD-1091,2024-12-25,Sumatera Utara,Makanan & Minuman,Snack Box,Toko Langsung,5,250000,0,1250000,3.6
+ORD-1092,2024-10-01,Kalimantan Selatan,Fashion,Kaos Polos,Reseller,4,2500000,0,10000000,5.0
+ORD-1093,2024-09-25,Bali,Makanan & Minuman,Kopi Arabika,Toko Langsung,14,250000,0,3500000,3.7
+ORD-1094,2024-06-03,Jawa Barat,Buku & Alat Tulis,Sticky Notes,Marketplace,3,499000,0,1497000,4.1
+ORD-1095,2024-12-23,Jawa Tengah,Buku & Alat Tulis,Pulpen Premium,WhatsApp,2,49000,10,88200,3.9
+ORD-1096,2024-08-13,Jawa Timur,Fashion,Sepatu Sneakers,Marketplace,5,2500000,0,12500000,3.8
+ORD-1097,2024-02-07,Bali,Buku & Alat Tulis,Novel Bestseller,Reseller,3,120000,20,288000,4.9
+ORD-1098,2024-02-13,Jawa Tengah,Elektronik,Smartwatch,Reseller,13,1200000,10,14040000,4.6
+ORD-1099,2024-04-25,Bali,Peralatan Rumah,Sapu Robot,Reseller,15,2500000,0,37500000,5.0

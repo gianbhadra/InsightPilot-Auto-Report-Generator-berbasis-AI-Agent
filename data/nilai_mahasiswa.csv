@@ -1,0 +1,81 @@
+nim,nama,kelas,mata_kuliah,dosen,nilai_uts,nilai_uas,nilai_tugas,nilai_akhir,grade,kehadiran_pct
+2024001,Mahasiswa 001,B,Basis Data,Prof. Siti Rahayu,78.3,98.0,88.7,88.78,A,91.1
+2024002,Mahasiswa 002,D,Statistika,Dr. Budi Santoso,50.9,46.4,72.5,54.5,E,87.1
+2024003,Mahasiswa 003,B,Kecerdasan Buatan,Dr. Rina Kartika,96.8,55.9,83.7,77.16,B,93.2
+2024004,Mahasiswa 004,A,Pemrograman Web,Dr. Andi Wijaya,83.3,61.6,87.4,75.65,B,92.2
+2024005,Mahasiswa 005,A,Statistika,Dr. Budi Santoso,74.3,81.4,62.8,74.27,C,85.9
+2024006,Mahasiswa 006,D,Kecerdasan Buatan,Dr. Rina Kartika,90.2,50.8,98.4,76.49,B,85.4
+2024007,Mahasiswa 007,D,Sistem Operasi,Dr. Maya Pratiwi,53.4,54.7,80.9,60.8,D,86.0
+2024008,Mahasiswa 008,A,Kecerdasan Buatan,Dr. Rina Kartika,69.0,85.2,70.7,75.91,B,94.1
+2024009,Mahasiswa 009,D,Statistika,Dr. Budi Santoso,93.5,58.4,78.6,75.73,B,84.4
+2024010,Mahasiswa 010,C,Statistika,Dr. Budi Santoso,46.6,91.8,67.3,69.86,C,68.5
+2024011,Mahasiswa 011,B,Statistika,Dr. Budi Santoso,60.4,77.8,95.2,76.06,B,82.2
+2024012,Mahasiswa 012,D,Pemrograman Web,Dr. Andi Wijaya,58.3,67.4,82.2,67.92,C,69.6
+2024013,Mahasiswa 013,D,Sistem Operasi,Dr. Maya Pratiwi,84.2,69.6,60.7,72.48,C,71.8
+2024014,Mahasiswa 014,C,Sistem Operasi,Dr. Maya Pratiwi,58.4,81.5,74.8,71.74,C,82.1
+2024015,Mahasiswa 015,C,Kecerdasan Buatan,Dr. Rina Kartika,99.8,75.3,74.1,83.57,B,78.1
+2024016,Mahasiswa 016,B,Statistika,Dr. Budi Santoso,57.7,84.7,72.6,72.22,C,89.7
+2024017,Mahasiswa 017,C,Basis Data,Prof. Siti Rahayu,56.9,71.6,89.0,70.81,C,99.1
+2024018,Mahasiswa 018,B,Pemrograman Web,Dr. Andi Wijaya,90.8,61.3,74.4,74.9,C,72.1
+2024019,Mahasiswa 019,D,Statistika,Dr. Budi Santoso,47.5,48.0,71.7,53.75,E,97.8
+2024020,Mahasiswa 020,B,Pemrograman Web,Dr. Andi Wijaya,93.0,76.6,78.8,82.89,B,77.6
+2024021,Mahasiswa 021,D,Pemrograman Web,Dr. Andi Wijaya,58.9,92.4,64.6,73.72,C,62.6
+2024022,Mahasiswa 022,C,Pemrograman Web,Dr. Andi Wijaya,76.7,82.8,66.1,76.49,B,92.4
+2024023,Mahasiswa 023,B,Pemrograman Web,Dr. Andi Wijaya,99.7,51.5,90.6,78.14,B,84.3
+2024024,Mahasiswa 024,D,Jaringan Komputer,Ir. Hendra Kusuma,65.9,95.0,71.9,79.04,B,83.5
+2024025,Mahasiswa 025,B,Statistika,Dr. Budi Santoso,76.3,48.3,98.4,70.62,C,64.0
+2024026,Mahasiswa 026,A,Sistem Operasi,Dr. Maya Pratiwi,56.6,81.3,66.3,68.91,C,67.0
+2024027,Mahasiswa 027,B,Basis Data,Prof. Siti Rahayu,45.1,69.8,83.8,64.66,D,71.7
+2024028,Mahasiswa 028,C,Statistika,Dr. Budi Santoso,83.9,83.7,78.2,82.39,B,87.5
+2024029,Mahasiswa 029,B,Sistem Operasi,Dr. Maya Pratiwi,77.4,89.2,67.9,79.75,B,64.6
+2024030,Mahasiswa 030,C,Sistem Operasi,Dr. Maya Pratiwi,53.2,59.6,65.7,58.89,D,62.4
+2024031,Mahasiswa 031,C,Jaringan Komputer,Ir. Hendra Kusuma,86.2,76.3,71.5,78.56,B,65.0
+2024032,Mahasiswa 032,A,Sistem Operasi,Dr. Maya Pratiwi,67.1,60.0,81.6,67.88,C,77.5
+2024033,Mahasiswa 033,A,Kecerdasan Buatan,Dr. Rina Kartika,85.4,78.2,61.0,76.42,B,69.2
+2024034,Mahasiswa 034,D,Sistem Operasi,Dr. Maya Pratiwi,90.2,76.7,90.5,84.88,B,67.0
+2024035,Mahasiswa 035,A,Statistika,Dr. Budi Santoso,55.0,77.2,85.4,71.48,C,79.7
+2024036,Mahasiswa 036,C,Kecerdasan Buatan,Dr. Rina Kartika,64.1,63.3,86.8,69.45,C,94.3
+2024037,Mahasiswa 037,A,Kecerdasan Buatan,Dr. Rina Kartika,83.2,60.9,97.8,77.93,B,92.5
+2024038,Mahasiswa 038,A,Kecerdasan Buatan,Dr. Rina Kartika,49.8,58.9,64.6,57.14,D,90.9
+2024039,Mahasiswa 039,D,Sistem Operasi,Dr. Maya Pratiwi,92.8,70.4,62.2,76.19,B,80.7
+2024040,Mahasiswa 040,C,Sistem Operasi,Dr. Maya Pratiwi,69.3,47.8,70.7,61.05,D,65.2
+2024041,Mahasiswa 041,B,Kecerdasan Buatan,Dr. Rina Kartika,93.4,71.7,61.2,76.67,B,85.2
+2024042,Mahasiswa 042,A,Sistem Operasi,Dr. Maya Pratiwi,53.7,75.3,82.1,69.44,C,63.7
+2024043,Mahasiswa 043,C,Kecerdasan Buatan,Dr. Rina Kartika,97.1,80.6,66.2,82.77,B,97.3
+2024044,Mahasiswa 044,D,Jaringan Komputer,Ir. Hendra Kusuma,83.8,67.9,79.3,76.31,B,78.9
+2024045,Mahasiswa 045,B,Jaringan Komputer,Ir. Hendra Kusuma,53.0,55.5,84.0,61.75,D,89.9
+2024046,Mahasiswa 046,C,Pemrograman Web,Dr. Andi Wijaya,60.2,88.5,76.6,75.62,B,97.4
+2024047,Mahasiswa 047,D,Pemrograman Web,Dr. Andi Wijaya,60.6,61.4,83.5,66.65,C,100.0
+2024048,Mahasiswa 048,D,Basis Data,Prof. Siti Rahayu,69.6,71.6,73.3,71.33,C,90.5
+2024049,Mahasiswa 049,D,Kecerdasan Buatan,Dr. Rina Kartika,96.3,92.8,99.2,95.62,A,69.6
+2024050,Mahasiswa 050,D,Basis Data,Prof. Siti Rahayu,92.1,67.6,72.7,77.45,B,78.9
+2024051,Mahasiswa 051,A,Kecerdasan Buatan,Dr. Rina Kartika,99.4,88.6,86.1,91.75,A,66.1
+2024052,Mahasiswa 052,D,Basis Data,Prof. Siti Rahayu,72.6,77.5,94.8,80.11,B,95.0
+2024053,Mahasiswa 053,B,Pemrograman Web,Dr. Andi Wijaya,73.9,70.1,88.9,76.13,B,76.4
+2024054,Mahasiswa 054,A,Pemrograman Web,Dr. Andi Wijaya,70.8,98.3,73.5,82.47,B,87.7
+2024055,Mahasiswa 055,D,Statistika,Dr. Budi Santoso,91.9,92.3,75.2,87.89,A,72.7
+2024056,Mahasiswa 056,B,Jaringan Komputer,Ir. Hendra Kusuma,47.0,48.8,85.2,57.27,D,96.8
+2024057,Mahasiswa 057,A,Sistem Operasi,Dr. Maya Pratiwi,50.0,98.8,90.4,79.62,B,88.2
+2024058,Mahasiswa 058,A,Kecerdasan Buatan,Dr. Rina Kartika,54.2,61.5,61.2,58.87,D,73.0
+2024059,Mahasiswa 059,B,Statistika,Dr. Budi Santoso,64.7,68.7,69.8,67.58,C,76.5
+2024060,Mahasiswa 060,D,Basis Data,Prof. Siti Rahayu,54.6,78.5,75.3,69.34,C,87.3
+2024061,Mahasiswa 061,A,Jaringan Komputer,Ir. Hendra Kusuma,52.9,70.4,70.2,64.22,D,70.2
+2024062,Mahasiswa 062,C,Kecerdasan Buatan,Dr. Rina Kartika,94.6,82.3,66.3,82.61,B,77.7
+2024063,Mahasiswa 063,C,Jaringan Komputer,Ir. Hendra Kusuma,61.5,97.9,87.6,82.59,B,78.3
+2024064,Mahasiswa 064,C,Basis Data,Prof. Siti Rahayu,100.0,91.9,64.3,87.84,A,75.3
+2024065,Mahasiswa 065,D,Jaringan Komputer,Ir. Hendra Kusuma,61.3,83.5,60.9,70.08,C,93.2
+2024066,Mahasiswa 066,D,Statistika,Dr. Budi Santoso,45.4,92.6,91.1,75.7,B,98.9
+2024067,Mahasiswa 067,B,Statistika,Dr. Budi Santoso,87.7,57.7,92.1,76.8,B,68.8
+2024068,Mahasiswa 068,B,Jaringan Komputer,Ir. Hendra Kusuma,58.8,86.6,90.7,77.89,B,87.2
+2024069,Mahasiswa 069,A,Sistem Operasi,Dr. Maya Pratiwi,50.3,79.5,61.6,64.81,D,91.5
+2024070,Mahasiswa 070,D,Jaringan Komputer,Ir. Hendra Kusuma,65.1,52.2,96.4,67.77,C,73.1
+2024071,Mahasiswa 071,C,Basis Data,Prof. Siti Rahayu,56.0,88.3,95.1,78.69,B,74.6
+2024072,Mahasiswa 072,C,Basis Data,Prof. Siti Rahayu,59.1,90.4,79.3,76.67,B,92.3
+2024073,Mahasiswa 073,D,Pemrograman Web,Dr. Andi Wijaya,70.8,49.1,90.2,66.97,C,69.0
+2024074,Mahasiswa 074,D,Jaringan Komputer,Ir. Hendra Kusuma,65.1,88.5,60.6,73.33,C,81.5
+2024075,Mahasiswa 075,C,Statistika,Dr. Budi Santoso,82.0,82.0,83.4,82.35,B,92.9
+2024076,Mahasiswa 076,C,Pemrograman Web,Dr. Andi Wijaya,82.1,70.9,84.8,78.3,B,97.7
+2024077,Mahasiswa 077,C,Jaringan Komputer,Ir. Hendra Kusuma,57.2,48.5,93.0,62.67,D,96.4
+2024078,Mahasiswa 078,D,Sistem Operasi,Dr. Maya Pratiwi,67.5,52.7,97.9,69.18,C,72.2
+2024079,Mahasiswa 079,D,Pemrograman Web,Dr. Andi Wijaya,50.3,93.8,65.4,71.47,C,78.1
+2024080,Mahasiswa 080,D,Jaringan Komputer,Ir. Hendra Kusuma,85.8,53.5,76.6,70.58,C,64.0
